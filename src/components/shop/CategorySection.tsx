@@ -24,7 +24,12 @@ export function CategorySection({ category, open, onToggle, onSelect }: Props) {
     return () => ro.disconnect();
   }, []);
 
+  const firstRun = useRef(true);
   useEffect(() => {
+    if (firstRun.current) {
+      firstRun.current = false;
+      return;
+    }
     if (!open) return;
     const t = window.setTimeout(() => {
       sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -51,7 +56,7 @@ export function CategorySection({ category, open, onToggle, onSelect }: Props) {
           }}
         >
           <div className="flex min-w-0 items-center gap-3">
-            <h2 className="truncate text-[22px] font-semibold leading-tight tracking-[-0.02em] text-foreground">
+            <h2 className="truncate text-[21px] font-semibold leading-tight tracking-[-0.02em] text-foreground">
               {category.title}
             </h2>
             <ChevronDown
@@ -72,8 +77,8 @@ export function CategorySection({ category, open, onToggle, onSelect }: Props) {
             {preview.map((item, i) => (
               <span
                 key={item.title}
-                className="h-14 w-14 overflow-hidden rounded-full bg-card ring-2 ring-card"
-                style={{ marginLeft: i === 0 ? 0 : -14 }}
+                className="h-12 w-12 overflow-hidden rounded-full bg-card ring-2 ring-card"
+                style={{ marginLeft: i === 0 ? 0 : -12 }}
               >
                 <img
                   src={item.image}
