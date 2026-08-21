@@ -1,24 +1,64 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
+import { TopBar } from "@/components/shop/TopBar";
+import { BottomDock } from "@/components/shop/BottomDock";
+import { CategorySection } from "@/components/shop/CategorySection";
+import { categories } from "@/data/categories";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "Categories — Atelier Shop" },
+      {
+        name: "description",
+        content:
+          "Browse Atelier's shop categories: topwear, bottomwear, footwear, accessories and trending edits, built for Telegram Mini Apps.",
+      },
+      { property: "og:title", content: "Categories — Atelier Shop" },
+      {
+        property: "og:description",
+        content:
+          "Tap a category to expand its collections and browse subcategories in a fast mobile shopping experience.",
+      },
+    ],
+  }),
+  component: CategoriesPage,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function CategoriesPage() {
+  const [openId, setOpenId] = useState<string | null>("topwear");
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="mx-auto min-h-screen w-full max-w-[520px] bg-background">
+      <TopBar />
+
+      <main
+        className="px-5"
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 104px)" }}
+      >
+        <h1 className="pb-6 pt-2 text-[38px] font-bold leading-none tracking-[-0.035em] text-foreground">
+          Categories
+        </h1>
+
+        <div className="flex flex-col gap-3.5">
+          {categories.map((category) => (
+            <CategorySection
+              key={category.id}
+              category={category}
+              open={openId === category.id}
+              onToggle={() =>
+                setOpenId((prev) => (prev === category.id ? null : category.id))
+              }
+              onSelect={(_route, title) => toast(`Opening ${title}`)}
+            />
+          ))}
+        </div>
+      </main>
+
+      <BottomDock active="categories" />
+      <Toaster position="top-center" />
     </div>
   );
 }
