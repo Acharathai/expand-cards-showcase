@@ -127,7 +127,7 @@ export function generateProducts(
     const imageCount = 3 + Math.floor(rnd() * 2);
     const images = Array.from(
       { length: imageCount },
-      (_, k) => IMAGE_POOL[(imgStart + k) % IMAGE_POOL.length],
+      (_, k) => IMAGE_POOL[(imgStart + k) % IMAGE_POOL.length]!,
     );
 
     const originalPrice = 799 + Math.floor(rnd() * 24) * 150;
@@ -138,7 +138,7 @@ export function generateProducts(
     const colorStart = Math.floor(rnd() * COLOR_OPTIONS.length);
     const colors = Array.from(
       { length: colorCount },
-      (_, k) => COLOR_OPTIONS[(colorStart + k) % COLOR_OPTIONS.length].hex,
+      (_, k) => COLOR_OPTIONS[(colorStart + k) % COLOR_OPTIONS.length]!.hex,
     );
 
     const sizeStart = Math.floor(rnd() * 2);

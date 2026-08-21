@@ -31,6 +31,7 @@ export function SearchOverlay({
       const t = window.setTimeout(() => inputRef.current?.focus(), 120);
       return () => window.clearTimeout(t);
     }
+    return undefined;
   }, [open, query]);
 
   // Debounced commit

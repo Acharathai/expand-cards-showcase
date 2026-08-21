@@ -26,7 +26,7 @@ function Group({
   defaultOpen,
 }: {
   title: string;
-  summary?: string;
+  summary?: string | undefined;
   children: ReactNode;
   defaultOpen?: boolean;
 }) {
