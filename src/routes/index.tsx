@@ -1,11 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { TopBar } from "@/components/shop/TopBar";
 import { BottomDock } from "@/components/shop/BottomDock";
 import { CategorySection } from "@/components/shop/CategorySection";
 import { categories } from "@/data/categories";
+import { slugFromRoute } from "@/data/catalog";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -29,6 +30,8 @@ export const Route = createFileRoute("/")({
 
 function CategoriesPage() {
   const [openId, setOpenId] = useState<string | null>("topwear");
+  const navigate = useNavigate();
+
 
   return (
     <div className="mx-auto min-h-screen w-full max-w-[520px] bg-background">
@@ -51,7 +54,10 @@ function CategoriesPage() {
               onToggle={() =>
                 setOpenId((prev) => (prev === category.id ? null : category.id))
               }
-              onSelect={(_route, title) => toast(`Opening ${title}`)}
+              onSelect={(route) =>
+                navigate({ to: "/c/$slug", params: { slug: slugFromRoute(route) } })
+              }
+
             />
           ))}
         </div>
