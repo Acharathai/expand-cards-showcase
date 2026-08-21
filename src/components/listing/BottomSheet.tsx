@@ -29,10 +29,16 @@ export function BottomSheet({ open, onClose, title, children, footer, full }: Pr
     if (!mounted) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
     };
-  }, [mounted]);
+  }, [mounted, onClose]);
+
 
   if (!mounted) return null;
 
