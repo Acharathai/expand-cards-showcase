@@ -56,7 +56,7 @@ export function CategorySection({ category, open, onToggle, onSelect }: Props) {
           }}
         >
           <div className="flex min-w-0 items-center gap-3">
-            <h2 className="truncate text-[21px] font-semibold leading-tight tracking-[-0.02em] text-foreground">
+            <h2 className="whitespace-nowrap text-[20px] font-semibold leading-tight tracking-[-0.02em] text-foreground">
               {category.title}
             </h2>
             <ChevronDown
