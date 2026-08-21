@@ -112,7 +112,7 @@ function makeRandom(seed: string) {
   };
 }
 
-const pick = <T,>(arr: T[], r: number) => arr[Math.floor(r * arr.length) % arr.length];
+const pick = <T,>(arr: T[], r: number) => arr[Math.floor(r * arr.length) % arr.length] as T;
 
 export function generateProducts(
   slug: string,
