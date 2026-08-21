@@ -21,8 +21,8 @@ export type Product = {
   price: number;
   originalPrice: number;
   discount: number;
-  badge?: string;
-  offer?: string;
+  badge?: string | undefined;
+  offer?: string | undefined;
   inStock: boolean;
   createdAt: number;
   popularity: number;
