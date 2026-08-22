@@ -16,7 +16,7 @@ import { order } from "@/data/order";
 export const Route = createFileRoute("/order")({
   head: () => ({
     meta: [
-      { title: "Order Details — Atelier Shop" },
+      { title: "Order Details — Storyfi" },
       {
         name: "description",
         content:

@@ -1,23 +1,19 @@
-import { ArrowLeft, Heart, Search, ShoppingBag } from "lucide-react";
+import { ArrowLeft, Heart, Moon, Search, Sun } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { useTheme } from "@/hooks/use-theme";
 
 type Props = {
   title: string;
   count: number;
-  cartCount?: number;
   wishlistCount?: number;
   onSearch: () => void;
   compact: boolean;
 };
 
-export function ListingHeader({
-  title,
-  count,
-  cartCount = 5,
-  wishlistCount = 0,
-  onSearch,
-  compact,
-}: Props) {
+export function ListingHeader({ title, count, wishlistCount = 0, onSearch, compact }: Props) {
+  const { theme, toggle } = useTheme();
+  const dark = theme === "dark";
+
   return (
     <header
       className="sticky top-0 z-30 bg-background/90 backdrop-blur-xl transition-shadow duration-300"
@@ -46,17 +42,24 @@ export function ListingHeader({
             className="overflow-hidden text-[12px] font-medium text-muted-foreground transition-all duration-300"
             style={{ height: compact ? 0 : 17, opacity: compact ? 0 : 1 }}
           >
-            {count} Products
+            {count} Stories
           </p>
         </div>
 
         <div className="flex shrink-0 items-center">
           <button
             onClick={onSearch}
-            aria-label="Search products"
+            aria-label="Search stories"
             className="press grid h-10 w-10 place-items-center rounded-full text-foreground active:bg-muted"
           >
             <Search size={20} strokeWidth={1.8} />
+          </button>
+          <button
+            onClick={toggle}
+            aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
+            className="press grid h-10 w-10 place-items-center rounded-full text-foreground active:bg-muted"
+          >
+            {dark ? <Sun size={19} strokeWidth={1.9} /> : <Moon size={19} strokeWidth={1.9} />}
           </button>
           <button
             aria-label="Wishlist"
@@ -66,15 +69,6 @@ export function ListingHeader({
             {wishlistCount > 0 && (
               <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-primary" />
             )}
-          </button>
-          <button
-            aria-label="Cart"
-            className="press relative grid h-10 w-10 place-items-center rounded-full text-foreground active:bg-muted"
-          >
-            <ShoppingBag size={20} strokeWidth={1.8} />
-            <span className="absolute right-0 top-0.5 grid h-[17px] min-w-[17px] place-items-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground">
-              {cartCount}
-            </span>
           </button>
         </div>
       </div>

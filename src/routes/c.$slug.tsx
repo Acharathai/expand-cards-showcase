@@ -268,6 +268,7 @@ function ListingPage() {
         value={filters}
         onApply={applyFilters}
         resultCount={resultCount}
+        mode={filterMode}
       />
 
       <SearchOverlay
@@ -275,9 +276,9 @@ function ListingPage() {
         onClose={() => setSearchOpen(false)}
         query={query}
         onQueryChange={commitQuery}
-        suggestions={[title, ...BRANDS.slice(0, 4)]}
+        suggestions={suggestions}
         recent={recent}
-        results={filterProducts(all, emptyFilters, query)}
+        results={searchResults}
       />
     </div>
   );

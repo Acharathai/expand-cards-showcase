@@ -81,8 +81,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover",
       },
-      { title: "Atelier Shop" },
-      { name: "description", content: "Mobile-first fashion shopping experience." },
+      { title: "Storyfi" },
+      { name: "description", content: "Audio stories across genres, platforms and languages." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
