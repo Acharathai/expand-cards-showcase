@@ -37,7 +37,9 @@ export function CategorySection({ category, open, onToggle, onSelect }: Props) {
     return () => window.clearTimeout(t);
   }, [open]);
 
-  const preview = category.items.slice(0, 3);
+  const preview = category.previews ?? category.items.slice(0, 3).map((i) => i.image);
+  const imageOnly = !!category.imageOnly;
+  const square = !!category.squareItems;
 
   return (
     <section ref={sectionRef} className="scroll-mt-20">
@@ -74,14 +76,14 @@ export function CategorySection({ category, open, onToggle, onSelect }: Props) {
               transform: open ? "translateX(12px) scale(0.9)" : "none",
             }}
           >
-            {preview.map((item, i) => (
+            {preview.map((src, i) => (
               <span
-                key={item.title}
+                key={src}
                 className="h-12 w-12 overflow-hidden rounded-full bg-card ring-2 ring-card"
                 style={{ marginLeft: i === 0 ? 0 : -12 }}
               >
                 <img
-                  src={item.image}
+                  src={src}
                   alt=""
                   loading="lazy"
                   width={512}
@@ -114,7 +116,12 @@ export function CategorySection({ category, open, onToggle, onSelect }: Props) {
                 <button
                   type="button"
                   onClick={() => onSelect(item.route, item.title)}
-                  className="press block w-full overflow-hidden rounded-[16px] border border-border bg-card text-left"
+                  aria-label={item.title}
+                  className={`press block w-full overflow-hidden text-left ${
+                    square
+                      ? "rounded-none"
+                      : "rounded-[16px] border border-border bg-card shadow-[var(--shadow-card)]"
+                  }`}
                   style={{
                     opacity: open ? 1 : 0,
                     transform: open ? "translateY(0)" : "translateY(14px)",
@@ -123,7 +130,10 @@ export function CategorySection({ category, open, onToggle, onSelect }: Props) {
                     transitionDelay: open ? `${120 + i * 40}ms` : "0ms",
                   }}
                 >
-                  <span className="block aspect-square overflow-hidden bg-muted">
+                  <span
+                    className={`block overflow-hidden ${square ? "" : "bg-muted"}`}
+                    style={{ aspectRatio: category.itemAspect ?? "1 / 1" }}
+                  >
                     <img
                       src={item.image}
                       alt={item.title}
@@ -133,9 +143,11 @@ export function CategorySection({ category, open, onToggle, onSelect }: Props) {
                       className="h-full w-full object-cover"
                     />
                   </span>
-                  <span className="block px-2.5 py-2.5 text-[12px] font-medium leading-snug tracking-[-0.01em] text-foreground">
-                    {item.title}
-                  </span>
+                  {!imageOnly && (
+                    <span className="block px-2.5 py-2.5 text-[12px] font-medium leading-snug tracking-[-0.01em] text-foreground">
+                      {item.title}
+                    </span>
+                  )}
                 </button>
               </li>
             ))}

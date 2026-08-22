@@ -29,7 +29,7 @@ export const Route = createFileRoute("/")({
 });
 
 function CategoriesPage() {
-  const [openId, setOpenId] = useState<string | null>("topwear");
+  const [openId, setOpenId] = useState<string | null>("platform");
   const navigate = useNavigate();
 
 
