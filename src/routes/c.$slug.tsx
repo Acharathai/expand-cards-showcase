@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ListingHeader } from "@/components/listing/ListingHeader";
 import { PromoStrip } from "@/components/listing/PromoStrip";
@@ -6,16 +6,18 @@ import { ProductCard } from "@/components/listing/ProductCard";
 import { ProductSkeletonGrid } from "@/components/listing/ProductSkeleton";
 import { BottomControls } from "@/components/listing/BottomControls";
 import { SortSheet } from "@/components/listing/SortSheet";
-import { FilterSheet } from "@/components/listing/FilterSheet";
-import { SearchOverlay } from "@/components/listing/SearchOverlay";
+import { FilterSheet, type FilterMode } from "@/components/listing/FilterSheet";
+import { SearchOverlay, type SearchResultItem } from "@/components/listing/SearchOverlay";
 import { EmptyState } from "@/components/listing/EmptyState";
 import { getCatalogEntry, getProducts, siblingLinks, slugFromRoute } from "@/data/catalog";
 import {
-  BRANDS,
+  GENRE_TITLES,
+  PLATFORM_TITLES,
   SORT_OPTIONS,
   countActiveFilters,
   emptyFilters,
   filterProducts,
+  formatPrice,
   sortProducts,
   type Filters,
   type SortKey,
@@ -32,11 +34,11 @@ export const Route = createFileRoute("/c/$slug")({
   head: ({ loaderData }) => {
     if (!loaderData) {
       return {
-        meta: [{ title: "Unavailable — Atelier Shop" }, { name: "robots", content: "noindex" }],
+        meta: [{ title: "Unavailable — Storyfi" }, { name: "robots", content: "noindex" }],
       };
     }
-    const title = `${loaderData.title} — ${loaderData.parentTitle} | Atelier Shop`;
-    const description = `Shop ${loaderData.title} at Atelier. Filter by brand, size, colour and price, sort by what matters and browse a fast mobile-first product grid.`;
+    const title = `${loaderData.title} — ${loaderData.parentTitle} | Storyfi`;
+    const description = `Browse ${loaderData.title} stories on Storyfi. Filter by genre, platform, language and price, sort by what matters and enjoy a fast mobile-first story grid.`;
     return {
       meta: [
         { title },
@@ -52,11 +54,12 @@ export const Route = createFileRoute("/c/$slug")({
 function ListingPage() {
   const { slug } = Route.useParams();
   const { title, parentId } = Route.useLoaderData();
+  const navigate = useNavigate();
 
   const all = useMemo(() => getProducts(slug), [slug]);
 
   const [loading, setLoading] = useState(true);
-  const [sort, setSort] = useState<SortKey>("popularity");
+  const [sort, setSort] = useState<SortKey>("price-asc");
   const [filters, setFilters] = useState<Filters>(emptyFilters);
   const [query, setQuery] = useState("");
   const [wishlist, setWishlist] = useState<string[]>([]);
@@ -141,8 +144,28 @@ function ListingPage() {
   }, []);
 
   const filterCount = countActiveFilters(filters);
-  const sortLabel = SORT_OPTIONS.find((o) => o.key === sort)?.label ?? "Popularity";
+  const sortLabel = SORT_OPTIONS.find((o) => o.key === sort)?.label ?? "Price : Low to High";
   const siblings = siblingLinks(parentId).filter((s) => slugFromRoute(s.route) !== slug);
+  const filterMode: FilterMode =
+    parentId === "genres" ? "genre" : parentId === "platform" ? "platform" : "language";
+
+  const searchResults = useMemo<SearchResultItem[]>(
+    () =>
+      filterProducts(all, emptyFilters, query).map((p) => ({
+        id: p.id,
+        title: p.title,
+        subtitle: `${p.genre} • ${p.platform} • ${p.language}`,
+        image: p.images[0],
+        right: formatPrice(p.price),
+        onSelect: () => navigate({ to: "/p/$productId", params: { productId: p.id } }),
+      })),
+    [all, query, navigate],
+  );
+
+  const suggestions = useMemo(
+    () => [title, ...GENRE_TITLES.slice(0, 3), ...PLATFORM_TITLES.slice(0, 3)],
+    [title],
+  );
 
   return (
     <div className="mx-auto min-h-[100dvh] w-full max-w-[520px] overflow-x-hidden bg-background">
@@ -166,7 +189,7 @@ function ListingPage() {
               {title}
             </h2>
             <span className="shrink-0 text-[12px] font-medium text-muted-foreground">
-              {visible.length} Products
+              {visible.length} Stories
             </span>
           </div>
           {query && (
@@ -245,6 +268,7 @@ function ListingPage() {
         value={filters}
         onApply={applyFilters}
         resultCount={resultCount}
+        mode={filterMode}
       />
 
       <SearchOverlay
@@ -252,9 +276,9 @@ function ListingPage() {
         onClose={() => setSearchOpen(false)}
         query={query}
         onQueryChange={commitQuery}
-        suggestions={[title, ...BRANDS.slice(0, 4)]}
+        suggestions={suggestions}
         recent={recent}
-        results={filterProducts(all, emptyFilters, query)}
+        results={searchResults}
       />
     </div>
   );
