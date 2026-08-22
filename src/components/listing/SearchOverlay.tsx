@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react";
 export type SearchResultItem = {
   id: string;
   title: string;
-  subtitle?: string;
-  image?: string;
-  right?: string;
-  onSelect?: () => void;
+  subtitle?: string | undefined;
+  image?: string | undefined;
+  right?: string | undefined;
+  onSelect?: (() => void) | undefined;
 };
 
 type Props = {
