@@ -144,8 +144,28 @@ function ListingPage() {
   }, []);
 
   const filterCount = countActiveFilters(filters);
-  const sortLabel = SORT_OPTIONS.find((o) => o.key === sort)?.label ?? "Popularity";
+  const sortLabel = SORT_OPTIONS.find((o) => o.key === sort)?.label ?? "Price : Low to High";
   const siblings = siblingLinks(parentId).filter((s) => slugFromRoute(s.route) !== slug);
+  const filterMode: FilterMode =
+    parentId === "genres" ? "genre" : parentId === "platform" ? "platform" : "language";
+
+  const searchResults = useMemo<SearchResultItem[]>(
+    () =>
+      filterProducts(all, emptyFilters, query).map((p) => ({
+        id: p.id,
+        title: p.title,
+        subtitle: `${p.genre} • ${p.platform} • ${p.language}`,
+        image: p.images[0],
+        right: formatPrice(p.price),
+        onSelect: () => navigate({ to: "/p/$productId", params: { productId: p.id } }),
+      })),
+    [all, query, navigate],
+  );
+
+  const suggestions = useMemo(
+    () => [title, ...GENRE_TITLES.slice(0, 3), ...PLATFORM_TITLES.slice(0, 3)],
+    [title],
+  );
 
   return (
     <div className="mx-auto min-h-[100dvh] w-full max-w-[520px] overflow-x-hidden bg-background">
@@ -169,7 +189,7 @@ function ListingPage() {
               {title}
             </h2>
             <span className="shrink-0 text-[12px] font-medium text-muted-foreground">
-              {visible.length} Products
+              {visible.length} Stories
             </span>
           </div>
           {query && (
