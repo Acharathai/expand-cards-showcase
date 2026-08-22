@@ -104,17 +104,10 @@ export function CategorySection({ category, open, onToggle, onSelect }: Props) {
             {preview.map((src, i) => (
               <span
                 key={src}
-                className="h-12 w-12 overflow-hidden rounded-full bg-card ring-2 ring-card"
+                className="relative h-12 w-12 overflow-hidden rounded-full bg-card ring-2 ring-card"
                 style={{ marginLeft: i === 0 ? 0 : -12 }}
               >
-                <img
-                  src={src}
-                  alt=""
-                  loading="lazy"
-                  width={512}
-                  height={512}
-                  className="h-full w-full object-cover"
-                />
+                <FadeImage src={src} alt="" />
               </span>
             ))}
           </div>
@@ -156,17 +149,10 @@ export function CategorySection({ category, open, onToggle, onSelect }: Props) {
                   }}
                 >
                   <span
-                    className={`block overflow-hidden ${square ? "" : "bg-muted"}`}
+                    className={`relative block overflow-hidden ${square ? "" : "bg-muted"}`}
                     style={{ aspectRatio: category.itemAspect ?? "1 / 1" }}
                   >
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      loading="lazy"
-                      width={512}
-                      height={512}
-                      className="h-full w-full object-cover"
-                    />
+                    <FadeImage src={item.image} alt={item.title} />
                   </span>
                   {!imageOnly && (
                     <span className="block px-2.5 py-2.5 text-[12px] font-medium leading-snug tracking-[-0.01em] text-foreground">
