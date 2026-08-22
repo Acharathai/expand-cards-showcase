@@ -27,10 +27,14 @@ import genreSuspenseThriller from "@/assets/genre-suspense-thriller.webp.asset.j
 import genreRebirth from "@/assets/genre-rebirth.webp.asset.json";
 import genreSuperpower from "@/assets/genre-superpower.webp.asset.json";
 import genreSciFi from "@/assets/genre-sci-fi.webp.asset.json";
+import languageHindi from "@/assets/language-hindi.png";
+import languageEnglish from "@/assets/language-english.png";
+import request1 from "@/assets/request-1.png";
+import request2 from "@/assets/request-2.png";
+import request3 from "@/assets/request-3.png";
 import topwear from "@/assets/cat-topwear.jpg";
 import bottomwear from "@/assets/cat-bottomwear.jpg";
 import footwear from "@/assets/cat-footwear.jpg";
-import accessories from "@/assets/cat-accessories.jpg";
 import newArrival from "@/assets/cat-new.jpg";
 import hoodie from "@/assets/cat-hoodie.jpg";
 import bag from "@/assets/cat-bag.jpg";
@@ -54,6 +58,12 @@ export type Category = {
   squareItems?: boolean;
   /** CSS aspect-ratio for expanded grid items (defaults to "1 / 1"). */
   itemAspect?: string;
+  /** Grid column count for expanded items (defaults to 3). */
+  columns?: number;
+  /** Card is visible but does not expand or navigate. */
+  disabled?: boolean;
+  /** Special tap action handled by the page instead of expansion. */
+  action?: "request-story";
 };
 
 export const categories: Category[] = [
@@ -102,48 +112,36 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: "footwear",
-    title: "Footwear",
-    tint: "var(--tint-pink)",
-    items: [
-      { title: "All Footwear", image: footwear, route: "/footwear" },
-      { title: "Sneakers", image: footwear, route: "/footwear/sneakers" },
-      { title: "Casual Shoes", image: footwear, route: "/footwear/casual" },
-      { title: "Sandals", image: footwear, route: "/footwear/sandals" },
-      { title: "Sports Shoes", image: footwear, route: "/footwear/sports" },
-      { title: "Loafers", image: footwear, route: "/footwear/loafers" },
-    ],
-  },
-  {
-    id: "accessories",
-    title: "Accessories",
+    id: "language",
+    title: "Language",
     tint: "var(--tint-blush)",
+    previews: [languageHindi, languageEnglish],
+    columns: 2,
+    itemAspect: "912 / 512",
     items: [
-      { title: "All Accessories", image: accessories, route: "/accessories" },
-      { title: "Watches", image: accessories, route: "/accessories/watches" },
-      { title: "Sunglasses", image: accessories, route: "/accessories/sunglasses" },
-      { title: "Bags", image: bag, route: "/accessories/bags" },
-      { title: "Belts", image: bag, route: "/accessories/belts" },
-      { title: "Caps", image: accessories, route: "/accessories/caps" },
+      { title: "Hindi", image: languageHindi, route: "/language/hindi" },
+      { title: "English", image: languageEnglish, route: "/language/english" },
     ],
   },
   {
     id: "new-arrivals",
-    title: "New Arrivals",
+    title: "New Listings",
     tint: "var(--tint-pink)",
+    disabled: true,
     items: [
       { title: "This Week", image: newArrival, route: "/new/this-week" },
       { title: "Just Dropped", image: topwear, route: "/new/just-dropped" },
       { title: "Back In Stock", image: footwear, route: "/new/back-in-stock" },
       { title: "Editors Picks", image: bag, route: "/new/editors-picks" },
       { title: "Season Edit", image: hoodie, route: "/new/season-edit" },
-      { title: "Limited", image: accessories, route: "/new/limited" },
+      { title: "Limited", image: bottomwear, route: "/new/limited" },
     ],
   },
   {
     id: "trending",
     title: "Trending",
     tint: "var(--tint-blush)",
+    disabled: true,
     items: [
       { title: "Most Loved", image: hoodie, route: "/trending/most-loved" },
       { title: "Bestsellers", image: topwear, route: "/trending/bestsellers" },
@@ -154,16 +152,11 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: "brands",
-    title: "Brands",
+    id: "request-story",
+    title: "Request a Story",
     tint: "var(--tint-pink)",
-    items: [
-      { title: "All Brands", image: bag, route: "/brands" },
-      { title: "Luxe", image: accessories, route: "/brands/luxe" },
-      { title: "Everyday", image: topwear, route: "/brands/everyday" },
-      { title: "Denim Labels", image: bottomwear, route: "/brands/denim" },
-      { title: "Sportswear", image: footwear, route: "/brands/sportswear" },
-      { title: "Studio", image: newArrival, route: "/brands/studio" },
-    ],
+    previews: [request1, request2, request3],
+    action: "request-story",
+    items: [],
   },
 ];

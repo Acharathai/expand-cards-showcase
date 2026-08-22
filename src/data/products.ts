@@ -13,6 +13,9 @@ export type Product = {
   title: string;
   category: string;
   categoryLabel: string;
+  genre: string;
+  platform: string;
+  language: string;
   images: string[];
   rating: number;
   reviews: number;
@@ -65,6 +68,37 @@ export const COLOR_OPTIONS = [
   { hex: "#F3F1EC", name: "Off White" },
   { hex: "#6B6F76", name: "Graphite" },
 ];
+
+/** Story metadata pools (fixed order, mirrors the categories data). */
+export const GENRE_TITLES = [
+  "Horror",
+  "Romance",
+  "Fantasy",
+  "Drama",
+  "Suspense & Thriller",
+  "Action",
+  "Love",
+  "Rags to Riches",
+  "Hidden Identity",
+  "Rebirth",
+  "Mystery",
+  "Crime",
+  "Adventure",
+  "Superpower",
+  "Sci-fi",
+];
+
+export const PLATFORM_TITLES = [
+  "Pocket FM",
+  "Kuku FM",
+  "Kuku TV",
+  "Pratilipi FM",
+  "EIGHT",
+  "Headfone",
+  "Story TV",
+];
+
+export const LANGUAGES = ["Hindi", "English"];
 
 const BADGES = [
   undefined,
@@ -150,6 +184,9 @@ export function generateProducts(
       title: `${pick(DESCRIPTORS, rnd())} ${pick(COLOR_WORDS, rnd())} ${categoryLabel.replace(/^All\s/, "")}`,
       category: slug,
       categoryLabel,
+      genre: pick(GENRE_TITLES, rnd()),
+      platform: pick(PLATFORM_TITLES, rnd()),
+      language: pick(LANGUAGES, rnd()),
       images,
       rating: Math.round((3.4 + rnd() * 1.6) * 10) / 10,
       reviews: 40 + Math.floor(rnd() * 3400),
@@ -169,78 +206,58 @@ export function generateProducts(
   return out;
 }
 
-export type SortKey = "popularity" | "new" | "price-desc" | "price-asc" | "discount";
+export type SortKey = "price-asc" | "price-desc";
 
 export const SORT_OPTIONS: { key: SortKey; label: string }[] = [
-  { key: "popularity", label: "Popularity" },
-  { key: "new", label: "New Arrival" },
-  { key: "price-desc", label: "Price : High to Low" },
   { key: "price-asc", label: "Price : Low to High" },
-  { key: "discount", label: "Discount" },
+  { key: "price-desc", label: "Price : High to Low" },
 ];
 
 export function sortProducts(items: Product[], key: SortKey) {
   const copy = [...items];
   switch (key) {
-    case "new":
-      return copy.sort((a, b) => b.createdAt - a.createdAt);
     case "price-desc":
       return copy.sort((a, b) => b.price - a.price);
-    case "price-asc":
-      return copy.sort((a, b) => a.price - b.price);
-    case "discount":
-      return copy.sort((a, b) => b.discount - a.discount);
     default:
-      return copy.sort((a, b) => b.popularity - a.popularity);
+      return copy.sort((a, b) => a.price - b.price);
   }
 }
 
 export type Filters = {
-  brands: string[];
-  sizes: string[];
-  colors: string[];
+  genres: string[];
+  platforms: string[];
+  languages: string[];
   priceMax: number;
-  rating: number;
-  discount: number;
-  inStockOnly: boolean;
 };
 
 export const PRICE_CEILING = 5000;
 
 export const emptyFilters: Filters = {
-  brands: [],
-  sizes: [],
-  colors: [],
+  genres: [],
+  platforms: [],
+  languages: [],
   priceMax: PRICE_CEILING,
-  rating: 0,
-  discount: 0,
-  inStockOnly: false,
 };
 
 export function countActiveFilters(f: Filters) {
   return (
-    f.brands.length +
-    f.sizes.length +
-    f.colors.length +
-    (f.priceMax < PRICE_CEILING ? 1 : 0) +
-    (f.rating > 0 ? 1 : 0) +
-    (f.discount > 0 ? 1 : 0) +
-    (f.inStockOnly ? 1 : 0)
+    f.genres.length +
+    f.platforms.length +
+    f.languages.length +
+    (f.priceMax < PRICE_CEILING ? 1 : 0)
   );
 }
 
 export function filterProducts(items: Product[], f: Filters, query = "") {
   const q = query.trim().toLowerCase();
   return items.filter((p) => {
-    if (f.brands.length && !f.brands.includes(p.brand)) return false;
-    if (f.sizes.length && !f.sizes.some((s) => p.sizes.includes(s))) return false;
-    if (f.colors.length && !f.colors.some((c) => p.colors.includes(c))) return false;
+    if (f.genres.length && !f.genres.includes(p.genre)) return false;
+    if (f.platforms.length && !f.platforms.includes(p.platform)) return false;
+    if (f.languages.length && !f.languages.includes(p.language)) return false;
     if (p.price > f.priceMax) return false;
-    if (f.rating && p.rating < f.rating) return false;
-    if (f.discount && p.discount < f.discount) return false;
-    if (f.inStockOnly && !p.inStock) return false;
     if (q) {
-      const hay = `${p.brand} ${p.title} ${p.categoryLabel}`.toLowerCase();
+      const hay =
+        `${p.brand} ${p.title} ${p.categoryLabel} ${p.genre} ${p.platform} ${p.language}`.toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;

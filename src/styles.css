@@ -106,6 +106,9 @@
 .dark {
   /* warm premium near-black palette */
   --background: oklch(0.155 0.006 60);
+  --tint-pink: oklch(0.26 0.028 350);
+  --tint-blush: oklch(0.27 0.026 30);
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.25), 0 10px 24px -14px oklch(0 0 0 / 0.55);
   --foreground: oklch(0.975 0.004 80);
   --card: oklch(0.205 0.006 60);
   --card-foreground: oklch(0.975 0.004 80);
