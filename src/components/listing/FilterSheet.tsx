@@ -4,7 +4,7 @@ import { BottomSheet } from "./BottomSheet";
 import {
   GENRE_TITLES,
   LANGUAGES,
-  PLATFORMS,
+  PLATFORM_TITLES,
   PRICE_CEILING,
   emptyFilters,
   formatPrice,
@@ -211,7 +211,7 @@ export function FilterSheet({ open, onClose, value, onApply, resultCount, mode }
           summary={draft.platforms.length ? `${draft.platforms.length} selected` : undefined}
         >
           <div className="flex flex-wrap gap-2">
-            {PLATFORMS.map((p) => (
+            {PLATFORM_TITLES.map((p) => (
               <Chip
                 key={p}
                 label={p}
