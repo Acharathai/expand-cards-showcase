@@ -22,6 +22,11 @@ import genreHiddenIdentity from "@/assets/genre-hidden-identity.webp.asset.json"
 import genreMystery from "@/assets/genre-mystery.webp.asset.json";
 import genreCrime from "@/assets/genre-crime.webp.asset.json";
 import genreAdventure from "@/assets/genre-adventure.webp.asset.json";
+import genreRomance from "@/assets/genre-romance.webp.asset.json";
+import genreSuspenseThriller from "@/assets/genre-suspense-thriller.webp.asset.json";
+import genreRebirth from "@/assets/genre-rebirth.webp.asset.json";
+import genreSuperpower from "@/assets/genre-superpower.webp.asset.json";
+import genreSciFi from "@/assets/genre-sci-fi.webp.asset.json";
 import topwear from "@/assets/cat-topwear.jpg";
 import bottomwear from "@/assets/cat-bottomwear.jpg";
 import footwear from "@/assets/cat-footwear.jpg";
@@ -80,15 +85,20 @@ export const categories: Category[] = [
     itemAspect: "1386 / 1920",
     items: [
       { title: "Horror", image: genreHorror.url, route: "/genres/horror" },
+      { title: "Romance", image: genreRomance.url, route: "/genres/romance" },
       { title: "Fantasy", image: genreFantasy.url, route: "/genres/fantasy" },
       { title: "Drama", image: genreDrama.url, route: "/genres/drama" },
+      { title: "Suspense & Thriller", image: genreSuspenseThriller.url, route: "/genres/suspense-thriller" },
       { title: "Action", image: genreAction.url, route: "/genres/action" },
       { title: "Love", image: genreLove.url, route: "/genres/love" },
       { title: "Rags to Riches", image: genreRagsToRiches.url, route: "/genres/rags-to-riches" },
       { title: "Hidden Identity", image: genreHiddenIdentity.url, route: "/genres/hidden-identity" },
+      { title: "Rebirth", image: genreRebirth.url, route: "/genres/rebirth" },
       { title: "Mystery", image: genreMystery.url, route: "/genres/mystery" },
       { title: "Crime", image: genreCrime.url, route: "/genres/crime" },
       { title: "Adventure", image: genreAdventure.url, route: "/genres/adventure" },
+      { title: "Superpower", image: genreSuperpower.url, route: "/genres/superpower" },
+      { title: "Sci-fi", image: genreSciFi.url, route: "/genres/sci-fi" },
     ],
   },
   {
