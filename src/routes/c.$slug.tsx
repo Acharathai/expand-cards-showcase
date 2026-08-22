@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ListingHeader } from "@/components/listing/ListingHeader";
 import { PromoStrip } from "@/components/listing/PromoStrip";
@@ -6,16 +6,18 @@ import { ProductCard } from "@/components/listing/ProductCard";
 import { ProductSkeletonGrid } from "@/components/listing/ProductSkeleton";
 import { BottomControls } from "@/components/listing/BottomControls";
 import { SortSheet } from "@/components/listing/SortSheet";
-import { FilterSheet } from "@/components/listing/FilterSheet";
-import { SearchOverlay } from "@/components/listing/SearchOverlay";
+import { FilterSheet, type FilterMode } from "@/components/listing/FilterSheet";
+import { SearchOverlay, type SearchResultItem } from "@/components/listing/SearchOverlay";
 import { EmptyState } from "@/components/listing/EmptyState";
 import { getCatalogEntry, getProducts, siblingLinks, slugFromRoute } from "@/data/catalog";
 import {
-  BRANDS,
+  GENRE_TITLES,
+  PLATFORM_TITLES,
   SORT_OPTIONS,
   countActiveFilters,
   emptyFilters,
   filterProducts,
+  formatPrice,
   sortProducts,
   type Filters,
   type SortKey,
@@ -32,11 +34,11 @@ export const Route = createFileRoute("/c/$slug")({
   head: ({ loaderData }) => {
     if (!loaderData) {
       return {
-        meta: [{ title: "Unavailable — Atelier Shop" }, { name: "robots", content: "noindex" }],
+        meta: [{ title: "Unavailable — Storyfi" }, { name: "robots", content: "noindex" }],
       };
     }
-    const title = `${loaderData.title} — ${loaderData.parentTitle} | Atelier Shop`;
-    const description = `Shop ${loaderData.title} at Atelier. Filter by brand, size, colour and price, sort by what matters and browse a fast mobile-first product grid.`;
+    const title = `${loaderData.title} — ${loaderData.parentTitle} | Storyfi`;
+    const description = `Browse ${loaderData.title} stories on Storyfi. Filter by genre, platform, language and price, sort by what matters and enjoy a fast mobile-first story grid.`;
     return {
       meta: [
         { title },
@@ -52,11 +54,12 @@ export const Route = createFileRoute("/c/$slug")({
 function ListingPage() {
   const { slug } = Route.useParams();
   const { title, parentId } = Route.useLoaderData();
+  const navigate = useNavigate();
 
   const all = useMemo(() => getProducts(slug), [slug]);
 
   const [loading, setLoading] = useState(true);
-  const [sort, setSort] = useState<SortKey>("popularity");
+  const [sort, setSort] = useState<SortKey>("price-asc");
   const [filters, setFilters] = useState<Filters>(emptyFilters);
   const [query, setQuery] = useState("");
   const [wishlist, setWishlist] = useState<string[]>([]);
