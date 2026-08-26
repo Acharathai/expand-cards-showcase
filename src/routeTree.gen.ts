@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as OrderRouteImport } from './routes/order'
 import { Route as CSlugRouteImport } from './routes/c.$slug'
 import { Route as PProductIdRouteImport } from './routes/p.$productId'
@@ -17,6 +18,11 @@ import { Route as PProductIdRouteImport } from './routes/p.$productId'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrderRoute = OrderRouteImport.update({
@@ -37,12 +43,14 @@ const PProductIdRoute = PProductIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRoute
   '/order': typeof OrderRoute
   '/c/$slug': typeof CSlugRoute
   '/p/$productId': typeof PProductIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRoute
   '/order': typeof OrderRoute
   '/c/$slug': typeof CSlugRoute
   '/p/$productId': typeof PProductIdRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRoute
   '/order': typeof OrderRoute
   '/c/$slug': typeof CSlugRoute
   '/p/$productId': typeof PProductIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/order' | '/c/$slug' | '/p/$productId'
+  fullPaths: '/' | '/checkout' | '/order' | '/c/$slug' | '/p/$productId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/order' | '/c/$slug' | '/p/$productId'
-  id: '__root__' | '/' | '/order' | '/c/$slug' | '/p/$productId'
+  to: '/' | '/checkout' | '/order' | '/c/$slug' | '/p/$productId'
+  id: '__root__' | '/' | '/checkout' | '/order' | '/c/$slug' | '/p/$productId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CheckoutRoute: typeof CheckoutRoute
   OrderRoute: typeof OrderRoute
   CSlugRoute: typeof CSlugRoute
   PProductIdRoute: typeof PProductIdRoute
@@ -76,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/order': {
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CheckoutRoute: CheckoutRoute,
   OrderRoute: OrderRoute,
   CSlugRoute: CSlugRoute,
   PProductIdRoute: PProductIdRoute,
