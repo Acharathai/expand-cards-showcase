@@ -6,7 +6,7 @@
  */
 export function CheckoutMark({ size = 132 }: { size?: number }) {
   return (
-    <span className="checkout-mark block" style={ width: size, height: size }>
+    <span className="checkout-mark block" style={{ width: size, height: size }}>
       <span className="checkout-mark-float block h-full w-full">
         <svg
           viewBox="0 0 420 420"
